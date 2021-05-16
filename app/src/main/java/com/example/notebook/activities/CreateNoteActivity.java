@@ -113,6 +113,26 @@ public class CreateNoteActivity extends AppCompatActivity {
             setViewOrUpdateNote();
         }
 
+        //For deleting web Url
+        findViewById(R.id.imageRemoveWebURL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textWebURL.setText(null);
+                layoutWebURL.setVisibility(View.GONE);
+            }
+        });
+
+        // For deleting image
+        findViewById(R.id.imageRemoveImage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageNote.setImageBitmap(null);
+                imageNote.setVisibility(View.GONE);
+                findViewById(R.id.imageRemoveImage).setVisibility(View.GONE);
+                selectedImagePath = "";
+            }
+        });
+
         initMiscellaneous();
         setSubtitleIndicatorColor();
     }
@@ -128,6 +148,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
             imageNote.setImageBitmap(BitmapFactory.decodeFile(alreadyAvailableNote.getImagePath()));
             imageNote.setVisibility(View.VISIBLE);
+            findViewById(R.id.imageRemoveImage).setVisibility(View.VISIBLE);
             selectedImagePath = alreadyAvailableNote.getImagePath();
         }
 
@@ -396,6 +417,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                         imageNote.setVisibility(View.VISIBLE);
                         imageNote.setImageBitmap(bitmap);
+                        findViewById(R.id.imageRemoveImage).setVisibility(View.VISIBLE);
 
                         /** From this we'll get a string from image */
                         selectedImagePath = getPathFromUri(selectImageUri);
