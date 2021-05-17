@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
          * the application is just started and we need to display all notes from database
          * and that's why we are passing REQUEST_CODE_SHOW_NOTES to that method..
          * */
-        getNotes(REQUEST_CODE_SHOW_NOTES);
+        getNotes(REQUEST_CODE_SHOW_NOTES, false);
     }
 
     /**
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
              * means a new note is added from CreateNote activity and its result is sent back to this
              * activity that's why we are passing REQUEST_CODE_ADD_NOTE to that method.
              * */
-            getNotes(REQUEST_CODE_ADD_NOTE);
+            getNotes(REQUEST_CODE_ADD_NOTE, false);
 
         } else if (requestCode == REQUEST_CODE_UPDATE_NOTE && resultCode == RESULT_OK) {
             if(data != null) {
@@ -100,12 +100,12 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                  * and its result is sent back to this activity that's why we are passing
                  * REQUEST_CODE_UPDATE_NOTE to that method.
                  * */
-                getNotes(REQUEST_CODE_UPDATE_NOTE);
+                getNotes(REQUEST_CODE_UPDATE_NOTE, data.getBooleanExtra("isNoteDeleted", false));
             }
         }
     }
 
-    private void getNotes(final int requestCode) {
+    private void getNotes(final int requestCode, final boolean isNoteDeleted) {
 
         /** Android AyncTask going to do background operation on background thread
          *   and update on main thread. In android we cant directly touch background
@@ -154,8 +154,12 @@ public class MainActivity extends AppCompatActivity implements NoteListener {
                      * position.
                      * */
                     noteList.remove(noteClickedPosition);
-                    noteList.add(noteClickedPosition, notes.get(noteClickedPosition));
-                    notesAdapter.notifyItemChanged(noteClickedPosition);
+                    if(isNoteDeleted) {
+                        notesAdapter.notifyItemRemoved(noteClickedPosition);
+                    } else {
+                        noteList.add(noteClickedPosition, notes.get(noteClickedPosition));
+                        notesAdapter.notifyItemChanged(noteClickedPosition);
+                    }
                 }
             }
         }
